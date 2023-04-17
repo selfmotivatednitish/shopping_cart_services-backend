@@ -1,11 +1,21 @@
 package com.nitish.project.spring.modal;
 
+import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String name;
 	private String image;
@@ -14,8 +24,21 @@ public class Product {
 	private String category;
 	private String[] subcategory;
 	
+	@OneToOne(mappedBy = "product")
+	@JsonIgnore
+	private CartItem cartItem;
+	
+	@OneToOne(mappedBy = "product")
+	@JsonIgnore
+	private OrderItem orderItem;
+	
 	public Product() {
 		super();
+	}
+
+	public Product(long id) {
+		super();
+		this.id = id;
 	}
 
 	public Product(long id, String name, String image, String description, double price, String category,
@@ -28,6 +51,8 @@ public class Product {
 		this.price = price;
 		this.category = category;
 		this.subcategory = subcategory;
+		this.cartItem = new CartItem();
+		this.orderItem = new OrderItem();
 	}
 
 	public long getId() {
@@ -84,5 +109,28 @@ public class Product {
 
 	public void setSubcategory(String[] subcategory) {
 		this.subcategory = subcategory;
+	}
+
+	public CartItem getCartItem() {
+		return cartItem;
+	}
+
+	public void setCartItem(CartItem cartItem) {
+		this.cartItem = cartItem;
+	}
+
+	public OrderItem getOrderItem() {
+		return orderItem;
+	}
+
+	public void setOrderItem(OrderItem orderItem) {
+		this.orderItem = orderItem;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", image=" + image + ", description=" + description + ", price="
+				+ price + ", category=" + category + ", subcategory=" + Arrays.toString(subcategory) + ", cartItem="
+				+ cartItem + ", orderItem=" + orderItem + "]";
 	}
 }

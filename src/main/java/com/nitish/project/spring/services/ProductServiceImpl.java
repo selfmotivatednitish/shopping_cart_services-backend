@@ -42,4 +42,20 @@ public class ProductServiceImpl implements ProductService {
 		productDao.delete(product);
 		return true;
 	}
+
+	@Override
+	public List<Product> getProductsByCategory(String category) {
+		return productDao.findByCategory(category);
+	}
+
+	@Override
+	public List<Product> getProductsBySearch(String searchString) {
+		return productDao.findByCategoryContaining(searchString);
+	}
+
+	@Override
+	public List<Product> getProductsByCategoryWithFilter(String category, String[] filters) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
