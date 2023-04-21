@@ -1,6 +1,6 @@
 package com.nitish.project.spring.modal;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +22,7 @@ public class Address {
 	
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	@JsonIgnore
+	@JsonIgnoreProperties("addresses")
 	private User user;
 	
 	public Address() {

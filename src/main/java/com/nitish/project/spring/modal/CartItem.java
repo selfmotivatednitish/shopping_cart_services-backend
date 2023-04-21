@@ -1,6 +1,5 @@
 package com.nitish.project.spring.modal;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -26,7 +25,7 @@ public class CartItem {
 
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	@JsonIgnore
+	@JsonIgnoreProperties("cartItems")
 	private User user;
 
 	public CartItem() {

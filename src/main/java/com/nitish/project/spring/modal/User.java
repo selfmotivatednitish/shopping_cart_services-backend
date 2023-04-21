@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderColumn;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -24,18 +23,14 @@ public class User {
 	private String phone;
 
 	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	@OrderColumn(name = "address_index")
 	private List<Address> addresses;
 
 	@OneToMany(mappedBy = "user")
 	@JsonIgnoreProperties("user")
-	@OrderColumn(name = "cartItem_index")
 	private List<CartItem> cartItems;
 	
 	@OneToMany(mappedBy = "user")
 	@JsonIgnoreProperties("user")
-	@OrderColumn(name = "order_index")
 	private List<Order> orders;
 
 	public User() {

@@ -62,7 +62,7 @@ public class MyController {
 	}
 
 	// add product
-	
+
 	@PostMapping("/products/addProduct")
 	public Product addProduct(@RequestBody Product product) {
 		return this.productService.addProduct(product);
@@ -115,7 +115,11 @@ public class MyController {
 	@PostMapping("user/login")
 	public User getUser(@RequestBody Login login) {
 		try {
-			return this.userService.loginUser(login.getEmail(), login.getPassword());
+			User user = this.userService.loginUser(login.getEmail(), login.getPassword());
+			for (int i = 0; i < user.getAddresses().size(); i++) {
+				user.getAddresses().get(i).setUser(null);
+			}
+			return user;
 		} catch (Exception e) {
 
 		}
@@ -179,6 +183,7 @@ public class MyController {
 	@PostMapping("/user/{userId}/addAddress")
 	public List<Address> addAddresses(@RequestBody Address address, @PathVariable String userId) {
 		try {
+//			address.setUser(new User(Long.parseLong(userId)));
 			return this.addressService.addAddress(address);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -226,14 +231,14 @@ public class MyController {
 		Order order = new Order();
 		order.setUser(new User(Long.parseLong(userId)));
 		List<OrderItem> orderItems = new ArrayList<>();
-		
+
 		OrderItem orderItem = new OrderItem();
 		orderItem.setOrder(order);
 		orderItem.setProduct(cartItem.getProduct());
 		orderItem.setQuantity(cartItem.getQuantity());
 		orderItem.setOrderStatus("Order Created");
 		orderItems.add(orderItem);
-		
+
 		order.setOrderItems(orderItems);
 		return orderService.createOrder(order);
 	}
