@@ -33,8 +33,8 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public boolean removeAddress(Long addressId) {
-		// TODO Auto-generated method stub
-		return false;
+	public List<Address> removeAddress(Long userId, Long addressId) {
+		addressDao.deleteById(addressId);
+		return getAddresses(userId);
 	}
 }

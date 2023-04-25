@@ -8,5 +8,5 @@ import com.nitish.project.spring.modal.Product;
 
 public interface ProductDao extends JpaRepository<Product, Long> {
 	public List<Product> findByCategory(String category);
-	public List<Product> findByCategoryContaining(String category);
+	public List<Product> findByNameContaining(String category);
 }

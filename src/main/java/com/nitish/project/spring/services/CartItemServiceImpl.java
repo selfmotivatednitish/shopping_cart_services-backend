@@ -10,7 +10,7 @@ import com.nitish.project.spring.modal.CartItem;
 
 @Service
 public class CartItemServiceImpl implements CartItemService {
-	
+
 	@Autowired
 	private CartItemDao cartItemDao;
 
@@ -19,15 +19,21 @@ public class CartItemServiceImpl implements CartItemService {
 		return cartItemDao.findAllByUserId(userId);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public CartItem getCartItem(Long userId, Long cartItemId) {
-		return cartItemDao.getById(cartItemId);
+	public CartItem getCartItem(Long userId, Long productId) {
+		return cartItemDao.findByUserIdAndProductId(userId, productId);
 	}
 
 	@Override
 	public List<CartItem> addCartItem(CartItem cartItem) {
-		cartItemDao.save(cartItem);
+		CartItem cartItem2 = null;
+		cartItem2 = getCartItem(cartItem.getUser().getId(), cartItem.getProduct().getId());
+		if (cartItem2 != null) {
+			cartItem2.setQuantity(cartItem2.getQuantity() + 1);
+			cartItemDao.save(cartItem2);
+		} else {
+			cartItemDao.save(cartItem);
+		}
 		return getAllCartItems(cartItem.getUser().getId());
 	}
 

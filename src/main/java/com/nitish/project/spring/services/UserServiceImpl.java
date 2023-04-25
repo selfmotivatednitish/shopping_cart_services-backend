@@ -50,7 +50,9 @@ public class UserServiceImpl implements UserService {
 	@SuppressWarnings("deprecation")
 	@Override
 	public User getProfile(Long id) {
-		return userDao.getById(id);
+		User user = userDao.getById(id);
+		user.setPassword("");
+		return user;
 	}
 
 	@Override

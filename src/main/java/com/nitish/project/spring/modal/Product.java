@@ -1,6 +1,8 @@
 package com.nitish.project.spring.modal;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -32,9 +35,10 @@ public class Product {
 	@JsonIgnore
 	private CartItem cartItem;
 	
-	@OneToOne(mappedBy = "product")
+	@OneToMany(mappedBy = "product")
+	@JsonIgnoreProperties("product")
 	@JsonIgnore
-	private OrderItem orderItem;
+	private List<OrderItem> orderItems;
 	
 	public Product() {
 		super();
@@ -56,7 +60,7 @@ public class Product {
 		this.category = category;
 		this.subcategory = subcategory;
 		this.cartItem = new CartItem();
-		this.orderItem = new OrderItem();
+		this.orderItems = new ArrayList<OrderItem>();
 	}
 
 	public long getId() {
@@ -123,18 +127,18 @@ public class Product {
 		this.cartItem = cartItem;
 	}
 
-	public OrderItem getOrderItem() {
-		return orderItem;
+	public List<OrderItem> getOrderItems() {
+		return orderItems;
 	}
 
-	public void setOrderItem(OrderItem orderItem) {
-		this.orderItem = orderItem;
+	public void setOrderItems(List<OrderItem> orderItems) {
+		this.orderItems = orderItems;
 	}
 
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", image=" + image + ", description=" + description + ", price="
 				+ price + ", category=" + category + ", subcategory=" + Arrays.toString(subcategory) + ", cartItem="
-				+ cartItem + ", orderItem=" + orderItem + "]";
+				+ cartItem + ", orderItems=" + orderItems + "]";
 	}
 }

@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> getProductsBySearch(String searchString) {
-		return productDao.findByCategoryContaining(searchString);
+		return productDao.findByNameContaining(searchString);
 	}
 
 	@Override

@@ -183,13 +183,22 @@ public class MyController {
 	@PostMapping("/user/{userId}/addAddress")
 	public List<Address> addAddresses(@RequestBody Address address, @PathVariable String userId) {
 		try {
-//			address.setUser(new User(Long.parseLong(userId)));
 			return this.addressService.addAddress(address);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println(e.getMessage());
 		}
-
+		return null;
+	}
+	
+	@DeleteMapping("/user/{userId}/removeAddress/{addressId}")
+	public List<Address> deleteAddress(@PathVariable String userId, @PathVariable String addressId) {
+		try {
+		    return addressService.removeAddress(Long.parseLong(userId), Long.parseLong(addressId));
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		
 		return null;
 	}
 
@@ -226,7 +235,7 @@ public class MyController {
 		return orderService.getOrders(Long.parseLong(userId));
 	}
 
-	@GetMapping("/order/{userId}/createOrder")
+	@PostMapping("/order/{userId}/createOrder")
 	public Order createOrder(@RequestBody CartItem cartItem, @PathVariable String userId) {
 		Order order = new Order();
 		order.setUser(new User(Long.parseLong(userId)));

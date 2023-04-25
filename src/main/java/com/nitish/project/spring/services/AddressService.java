@@ -11,5 +11,5 @@ public interface AddressService {
 
 	public List<Address> updateAddress(Address address);
 
-	public boolean removeAddress(Long addressId);
+	public List<Address> removeAddress(Long userId, Long addressId);
 }
