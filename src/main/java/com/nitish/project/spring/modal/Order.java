@@ -3,6 +3,7 @@ package com.nitish.project.spring.modal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -22,13 +23,14 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("order")
 	private List<OrderItem> orderItems;
 
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	@JsonIgnoreProperties("orders")
+	@JsonIgnore
 	private User user;
 
 	public Order() {

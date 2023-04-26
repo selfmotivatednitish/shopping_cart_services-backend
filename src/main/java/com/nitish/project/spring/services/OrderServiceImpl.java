@@ -10,7 +10,7 @@ import com.nitish.project.spring.modal.Order;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-	
+
 	@Autowired
 	private OrderDao orderDao;
 
@@ -22,6 +22,12 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order createOrder(Order order) {
 		return orderDao.save(order);
+	}
+
+	@Override
+	public List<Order> deleteOrderById(long userId, long orderId) {
+		orderDao.deleteById(orderId);		
+		return getOrders(userId);
 	}
 
 }
