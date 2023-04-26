@@ -1,6 +1,7 @@
 package com.nitish.project.spring.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,23 @@ public class CartItemServiceImpl implements CartItemService {
 		CartItem cartItem = cartItemDao.findByUserIdAndProductId(userId, productId);
 		cartItem.setQuantity(cartItem.getQuantity() + quantity);
 		return cartItem;
+	}
+
+	@Override
+	public List<CartItem> increaseCartItem(Long cartItemId) {
+		Optional<CartItem> optional = cartItemDao.findById(cartItemId);
+		CartItem cartItem = optional.orElse(null);
+		cartItem.setQuantity(cartItem.getQuantity() + 1);
+		cartItemDao.save(cartItem);
+		return getAllCartItems(cartItem.getUser().getId());
+	}
+
+	@Override
+	public List<CartItem> decreaseCartItem(Long cartItemId) {
+		Optional<CartItem> optional = cartItemDao.findById(cartItemId);
+		CartItem cartItem = optional.orElse(null);
+		cartItem.setQuantity(cartItem.getQuantity() - 1);
+		cartItemDao.save(cartItem);
+		return getAllCartItems(cartItem.getUser().getId());
 	}
 }

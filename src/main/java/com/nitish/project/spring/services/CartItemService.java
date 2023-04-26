@@ -14,4 +14,8 @@ public interface CartItemService {
 	public CartItem changeQuantityCartItem(Long userId, Long productId, Long quantity);
 	
 	public boolean removeCartItem(Long userId, Long productId);
+	
+	public List<CartItem> increaseCartItem(Long cartItemId);
+	
+	public List<CartItem> decreaseCartItem(Long cartItemId);
 }
