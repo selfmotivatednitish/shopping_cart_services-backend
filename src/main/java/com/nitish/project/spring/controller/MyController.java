@@ -25,6 +25,7 @@ import com.nitish.project.spring.modal.Quantity;
 import com.nitish.project.spring.modal.User;
 import com.nitish.project.spring.services.AddressService;
 import com.nitish.project.spring.services.CartItemService;
+import com.nitish.project.spring.services.OrderItemService;
 import com.nitish.project.spring.services.OrderService;
 import com.nitish.project.spring.services.ProductService;
 import com.nitish.project.spring.services.UserService;
@@ -47,6 +48,9 @@ public class MyController {
 
 	@Autowired
 	private OrderService orderService;
+
+	@Autowired
+	private OrderItemService orderItemService;
 
 	@GetMapping("/home")
 	public String home() {
@@ -80,7 +84,6 @@ public class MyController {
 		return this.productService.getProduct(Long.parseLong(productId));
 	}
 
-	// get product by category
 	@GetMapping("/products/category/{category}")
 	public List<Product> getProductsByCategory(@PathVariable String category) {
 		return this.productService.getProductsByCategory(category);
@@ -190,15 +193,15 @@ public class MyController {
 		}
 		return null;
 	}
-	
+
 	@DeleteMapping("/user/{userId}/removeAddress/{addressId}")
 	public List<Address> deleteAddress(@PathVariable String userId, @PathVariable String addressId) {
 		try {
-		    return addressService.removeAddress(Long.parseLong(userId), Long.parseLong(addressId));
+			return addressService.removeAddress(Long.parseLong(userId), Long.parseLong(addressId));
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		
+
 		return null;
 	}
 
@@ -218,6 +221,16 @@ public class MyController {
 		return cartItemService.addCartItem(cartItem);
 	}
 
+	@PutMapping("/cart/cartItem/{cartItemId}/incrquant")
+	public List<CartItem> incrItem(@PathVariable String cartItemId) {
+		return cartItemService.increaseCartItem(Long.parseLong(cartItemId));
+	}
+
+	@PutMapping("/cart/cartItem/{cartItemId}/decrquant")
+	public List<CartItem> decrItem(@PathVariable String cartItemId) {
+		return cartItemService.decreaseCartItem(Long.parseLong(cartItemId));
+	}
+
 	@DeleteMapping("/cart/{userId}/remove/{productId}")
 	public boolean removeCartItem(@PathVariable String userId, @PathVariable String productId) {
 		return cartItemService.removeCartItem(Long.parseLong(userId), Long.parseLong(productId));
@@ -234,6 +247,8 @@ public class MyController {
 	public List<Order> getOrders(@PathVariable String userId) {
 		return orderService.getOrders(Long.parseLong(userId));
 	}
+	
+	
 
 	@PostMapping("/order/{userId}/createOrder")
 	public Order createOrder(@RequestBody CartItem cartItem, @PathVariable String userId) {
@@ -250,5 +265,46 @@ public class MyController {
 
 		order.setOrderItems(orderItems);
 		return orderService.createOrder(order);
+	}
+	
+	@PostMapping("/order/{userId}/checkout")
+	public ResponseEntity<List<Order>> checkoutCart(@PathVariable String userId) {
+		List<CartItem> cartItems = getAllCartItems(userId);
+		Order order = new Order();
+		order.setUser((new User(Long.parseLong(userId))));
+		List<OrderItem> orderItems = new ArrayList<>();
+		for (CartItem cartItem : cartItems) {
+			removeCartItem(userId, "" + cartItem.getProduct().getId());
+			OrderItem orderItem = new OrderItem();
+			orderItem.setOrder(order);
+			orderItem.setProduct(cartItem.getProduct());
+			orderItem.setQuantity(cartItem.getQuantity());
+			orderItem.setOrderStatus("Order Created");
+			orderItems.add(orderItem);
+		}
+		
+		order.setOrderItems(orderItems);
+		orderService.createOrder(order);
+		
+		List<Order> orders = orderService.getOrders(Long.parseLong(userId));
+		
+		return ResponseEntity.ok(orders);
+	}
+	
+	@DeleteMapping("/order/{userId}/cancelOrderItem/{OrderItemId}")
+	public ResponseEntity<List<Order>> deleteOrderItem(@PathVariable String userId, @PathVariable String OrderItemId) {
+		if(orderItemService.removeOrderItem(Long.parseLong(OrderItemId))) {
+			List<Order> orders = orderService.getOrders(Long.parseLong(userId));
+			
+			return ResponseEntity.ok(orders);
+		}
+		else {
+			return null;
+		}
+	}
+
+	@DeleteMapping("/order/{userId}/cancelOrder/{OrderId}")
+	public List<Order> deleteOrder(@PathVariable String userId, @PathVariable String OrderId) {
+		return orderService.deleteOrderById(Long.parseLong(userId), Long.parseLong(OrderId));
 	}
 }
