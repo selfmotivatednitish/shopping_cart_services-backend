@@ -215,9 +215,9 @@ public class MyController {
 		return cartItemService.getCartItem(Long.parseLong(userId), Long.parseLong(cartItemId));
 	}
 
-	@GetMapping("/cart/{userId}/add/{productId}")
-	public List<CartItem> addCartItem(@PathVariable String userId, @PathVariable String productId) {
-		CartItem cartItem = new CartItem(1, new Product(Long.parseLong(productId)), new User(Long.parseLong(userId)));
+	@GetMapping("/cart/{userId}/add/{productId}/{quantity}")
+	public List<CartItem> addCartItem(@PathVariable String userId, @PathVariable String productId, @PathVariable String quantity) {
+		CartItem cartItem = new CartItem(Long.parseLong(quantity), new Product(Long.parseLong(productId)), new User(Long.parseLong(userId)));
 		return cartItemService.addCartItem(cartItem);
 	}
 

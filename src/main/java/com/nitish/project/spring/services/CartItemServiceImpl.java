@@ -30,7 +30,7 @@ public class CartItemServiceImpl implements CartItemService {
 		CartItem cartItem2 = null;
 		cartItem2 = getCartItem(cartItem.getUser().getId(), cartItem.getProduct().getId());
 		if (cartItem2 != null) {
-			cartItem2.setQuantity(cartItem2.getQuantity() + 1);
+			cartItem2.setQuantity(cartItem2.getQuantity() + cartItem.getQuantity());
 			cartItemDao.save(cartItem2);
 		} else {
 			cartItemDao.save(cartItem);
