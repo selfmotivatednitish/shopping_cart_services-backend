@@ -22,6 +22,7 @@ import com.nitish.project.spring.modal.Order;
 import com.nitish.project.spring.modal.OrderItem;
 import com.nitish.project.spring.modal.Product;
 import com.nitish.project.spring.modal.Quantity;
+import com.nitish.project.spring.modal.Role;
 import com.nitish.project.spring.modal.User;
 import com.nitish.project.spring.services.AddressService;
 import com.nitish.project.spring.services.CartItemService;
@@ -132,6 +133,7 @@ public class MyController {
 	@PostMapping("user/signup")
 	public User addUser(@RequestBody User user) {
 		try {
+			user.setRole(new Role(1));
 			return this.userService.signupUser(user);
 		} catch (Exception e) {
 			// TODO: handle exception

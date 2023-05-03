@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -33,6 +35,11 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("user")
 	private List<Order> orders;
+	
+	@ManyToOne
+	@JoinColumn(name = "roleId")
+	@JsonIgnoreProperties("users")
+	private Role role;
 
 	public User() {
 		super();
@@ -52,6 +59,7 @@ public class User {
 		this.addresses = new ArrayList<>();
 		this.cartItems = new ArrayList<>();
 		this.orders = new ArrayList<>();
+		this.role = new Role(1); 
 	}
 
 	public long getId() {
@@ -118,9 +126,18 @@ public class User {
 		this.orders = orders;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", phone=" + phone
-				+ ", addresses=" + addresses + ", cartItems=" + cartItems + ", orders=" + orders + "]";
+				+ ", addresses=" + addresses + ", cartItems=" + cartItems + ", orders=" + orders + ", role=" + role
+				+ "]";
 	}
 }
