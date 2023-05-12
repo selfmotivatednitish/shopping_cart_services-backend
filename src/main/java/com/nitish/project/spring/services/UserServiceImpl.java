@@ -1,6 +1,7 @@
 package com.nitish.project.spring.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.nitish.project.spring.dao.UserDao;
@@ -12,17 +13,12 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	@Override
-	public User loginUser(String email, String password) {
-		User loginUser = userDao.findByEmail(email);
-		if(loginUser != null && loginUser.getPassword() == password) {
-			loginUser.setPassword("");
-		}
-		return loginUser;
-	}
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public User signupUser(User user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		User signupUser = userDao.findByEmail(user.getEmail());
 		if(signupUser == null) {
 			signupUser = userDao.save(user);
@@ -31,6 +27,7 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 		signupUser.setPassword("");
+		
 		return signupUser;
 	}
 
@@ -47,12 +44,13 @@ public class UserServiceImpl implements UserService {
 		return updateUser;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public User getProfile(Long id) {
-		User user = userDao.getById(id);
-		user.setPassword("");
-		return user;
+	public User getProfile(String email) {
+		User loginUser = userDao.findByEmail(email);
+		if(loginUser != null) {
+			loginUser.setPassword("");
+		}
+		return loginUser;
 	}
 
 	@Override

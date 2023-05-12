@@ -24,6 +24,7 @@ public class User {
 	private String email;
 	private String password;
 	private String phone;
+	private String roles;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Address> addresses;
@@ -36,10 +37,10 @@ public class User {
 	@JsonIgnoreProperties("user")
 	private List<Order> orders;
 	
-	@ManyToOne
-	@JoinColumn(name = "roleId")
-	@JsonIgnoreProperties("users")
-	private Role role;
+//	@ManyToOne
+//	@JoinColumn(name = "roleId")
+//	@JsonIgnoreProperties("users")
+//	private Role role;
 
 	public User() {
 		super();
@@ -49,7 +50,7 @@ public class User {
 		this.id = userId;
 	}
 
-	public User(long id, String name, String email, String password, String phone) {
+	public User(long id, String name, String email, String password, String phone, String roles) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -59,7 +60,8 @@ public class User {
 		this.addresses = new ArrayList<>();
 		this.cartItems = new ArrayList<>();
 		this.orders = new ArrayList<>();
-		this.role = new Role(1); 
+//		this.role = new Role(1); 
+		this.roles = roles;
 	}
 
 	public long getId() {
@@ -126,18 +128,26 @@ public class User {
 		this.orders = orders;
 	}
 
-	public Role getRole() {
-		return role;
+//	public Role getRole() {
+//		return role;
+//	}
+//
+//	public void setRole(Role role) {
+//		this.role = role;
+//	}
+
+//	@Override
+//	public String toString() {
+//		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", phone=" + phone
+//				+ ", addresses=" + addresses + ", cartItems=" + cartItems + ", orders=" + orders + ", role=" + role
+//				+ "]";
+//	}
+
+	public String getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", phone=" + phone
-				+ ", addresses=" + addresses + ", cartItems=" + cartItems + ", orders=" + orders + ", role=" + role
-				+ "]";
+	public void setRoles(String roles) {
+		this.roles = roles;
 	}
 }
